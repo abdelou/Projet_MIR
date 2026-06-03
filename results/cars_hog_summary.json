@@ -1,0 +1,18 @@
+{
+  "descriptor": "hog",
+  "metric": "euclidean",
+  "n_images": 10000,
+  "descriptor_dim": 8100,
+  "features_size_mb": 308.990478515625,
+  "indexing_time_s": 27.943053722381592,
+  "avg_search_time_per_query_s": 0.22238440666891013,
+  "avg_search_time_per_db_image_s": 2.223844066689101e-05,
+  "mean_P@20": 0.14333333333333334,
+  "mean_P@50": 0.13066666666666665,
+  "mean_P@100": 0.12399999999999999,
+  "mAP@20": 0.055371527423385004,
+  "mAP@50": 0.03437076170062463,
+  "mAP@100": 0.025613769754585822,
+  "mAP_full": 0.10435209400871512,
+  "mean_R_Precision": 0.10717384050717382
+}

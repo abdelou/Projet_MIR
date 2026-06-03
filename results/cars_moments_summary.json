@@ -1,0 +1,18 @@
+{
+  "descriptor": "moments",
+  "metric": "euclidean",
+  "n_images": 10000,
+  "descriptor_dim": 7,
+  "features_size_mb": 0.26702880859375,
+  "indexing_time_s": 26.872103214263916,
+  "avg_search_time_per_query_s": 0.0005636200017761439,
+  "avg_search_time_per_db_image_s": 5.636200017761439e-08,
+  "mean_P@20": 0.10333333333333336,
+  "mean_P@50": 0.09733333333333334,
+  "mean_P@100": 0.09466666666666666,
+  "mAP@20": 0.022557172789370937,
+  "mAP@50": 0.015843729242932567,
+  "mAP@100": 0.013146640001800025,
+  "mAP_full": 0.09997443168668455,
+  "mean_R_Precision": 0.10003336670003336
+}

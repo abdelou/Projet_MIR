@@ -1,0 +1,18 @@
+{
+  "descriptor": "glcm",
+  "metric": "euclidean",
+  "n_images": 10000,
+  "descriptor_dim": 7,
+  "features_size_mb": 0.26702880859375,
+  "indexing_time_s": 37.47074317932129,
+  "avg_search_time_per_query_s": 0.0006157999974675477,
+  "avg_search_time_per_db_image_s": 6.157999974675476e-08,
+  "mean_P@20": 0.14666666666666664,
+  "mean_P@50": 0.11866666666666666,
+  "mean_P@100": 0.12133333333333332,
+  "mAP@20": 0.04986938918208269,
+  "mAP@50": 0.02924302130885664,
+  "mAP@100": 0.0232562335131306,
+  "mAP_full": 0.10245510479887776,
+  "mean_R_Precision": 0.10590590590590591
+}

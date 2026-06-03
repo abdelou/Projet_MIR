@@ -1,0 +1,18 @@
+{
+  "descriptor": "vit_b_16",
+  "metric": "cosine",
+  "n_images": 10000,
+  "descriptor_dim": 768,
+  "features_size_mb": 29.296875,
+  "indexing_time_s": 1364.530071258545,
+  "avg_search_time_per_query_s": 0.022059033333789557,
+  "avg_search_time_per_db_image_s": 2.205903333378956e-06,
+  "mean_P@20": 0.26999999999999996,
+  "mean_P@50": 0.23066666666666666,
+  "mean_P@100": 0.20266666666666666,
+  "mAP@20": 0.1530343177777388,
+  "mAP@50": 0.09592975208318358,
+  "mAP@100": 0.06892734966362155,
+  "mAP_full": 0.13114939743233495,
+  "mean_R_Precision": 0.15055055055055055
+}

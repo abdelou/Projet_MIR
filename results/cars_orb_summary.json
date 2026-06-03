@@ -1,0 +1,18 @@
+{
+  "descriptor": "orb",
+  "metric": "euclidean",
+  "n_images": 10000,
+  "descriptor_dim": 64,
+  "features_size_mb": 2.44140625,
+  "indexing_time_s": 49.17835807800293,
+  "avg_search_time_per_query_s": 0.0019331533345393836,
+  "avg_search_time_per_db_image_s": 1.9331533345393835e-07,
+  "mean_P@20": 0.17666666666666667,
+  "mean_P@50": 0.14800000000000002,
+  "mean_P@100": 0.12333333333333334,
+  "mAP@20": 0.0498643245729159,
+  "mAP@50": 0.03473815538682959,
+  "mAP@100": 0.02474452275025731,
+  "mAP_full": 0.10360143733776167,
+  "mean_R_Precision": 0.10870870870870872
+}

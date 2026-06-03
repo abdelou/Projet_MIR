@@ -1,0 +1,18 @@
+{
+  "descriptor": "hsv",
+  "metric": "chi_square",
+  "n_images": 10000,
+  "descriptor_dim": 540,
+  "features_size_mb": 20.599365234375,
+  "indexing_time_s": 26.751933574676514,
+  "avg_search_time_per_query_s": 0.037025126667382814,
+  "avg_search_time_per_db_image_s": 3.7025126667382812e-06,
+  "mean_P@20": 0.15666666666666668,
+  "mean_P@50": 0.14266666666666666,
+  "mean_P@100": 0.14066666666666666,
+  "mAP@20": 0.05985238378465932,
+  "mAP@50": 0.04065393572235913,
+  "mAP@100": 0.03185618255943336,
+  "mAP_full": 0.10345615963450847,
+  "mean_R_Precision": 0.10463797130463796
+}

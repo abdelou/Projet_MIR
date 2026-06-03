@@ -1,0 +1,18 @@
+{
+  "descriptor": "sift",
+  "metric": "euclidean",
+  "n_images": 10000,
+  "descriptor_dim": 256,
+  "features_size_mb": 9.765625,
+  "indexing_time_s": 131.05495858192444,
+  "avg_search_time_per_query_s": 0.006346960001974366,
+  "avg_search_time_per_db_image_s": 6.346960001974366e-07,
+  "mean_P@20": 0.10333333333333333,
+  "mean_P@50": 0.10800000000000001,
+  "mean_P@100": 0.11466666666666668,
+  "mAP@20": 0.0294034979038849,
+  "mAP@50": 0.02155936111252176,
+  "mAP@100": 0.01809448677675805,
+  "mAP_full": 0.10316806179490172,
+  "mean_R_Precision": 0.10450450450450452
+}

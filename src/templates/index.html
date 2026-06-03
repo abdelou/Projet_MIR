@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MainWindow - MIR Engine</title>
+
+    <style>
+        :root {
+            --bg: #f0f0f0;
+            --border: #808080;
+            --text: #000000;
+        }
+
+        body {
+            font-family: "MS Sans Serif", "Tahoma", sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .window-title {
+            background-color: #000080;
+            color: white;
+            padding: 5px 15px;
+            font-size: 16px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .container-wrapper {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .top-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        fieldset {
+            border: 2px groove #fff;
+            padding: 15px;
+            margin: 0;
+        }
+
+        legend {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .request-box { width: 140px; text-align: center; }
+        .descriptor-box { flex: 1; }
+        .search-box { flex: 2; }
+        .rp_box { width: 220px; }
+
+        .descriptor-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .search-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            gap: 15px;
+            height: 100%;
+        }
+
+        button {
+            background: #d4d0c8;
+            border: 2px outset #fff;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        button:active {
+            border: 2px inset #fff;
+        }
+
+        .load-btn {
+            width: 100px;
+            height: 80px;
+        }
+
+        .search-unimodal-btn {
+            background: #000080;
+            color: white;
+            border: 2px outset #0000df;
+        }
+
+        .search-multimodal-btn {
+            background: #004000;
+            color: white;
+            border: 2px outset #006000;
+        }
+
+        select {
+            padding: 8px;
+            font-size: 14px;
+        }
+
+        .titles-bar {
+            display: flex;
+            font-weight: bold;
+            text-align: center;
+            background: #c0c0c0;
+            border: 1px solid var(--border);
+            padding: 8px;
+            font-size: 15px;
+        }
+
+        .main-display {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            flex: 1;
+        }
+
+        .top-display-area {
+            display: flex;
+            gap: 15px;
+            height: 350px;
+        }
+
+        .display-column {
+            border: 1px solid var(--border);
+            background: #fff;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .request-image {
+            width: 350px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .results-grid {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 10px;
+            padding: 15px;
+        }
+
+        .result-item {
+            font-size: 11px;
+            text-align: center;
+        }
+
+        .result-item img {
+            width: 100%;
+            height: 100px;
+            object-fit: contain;
+            border: 1px solid #ccc;
+            background: white;
+        }
+
+        .bottom-display-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            min-height: 400px;
+        }
+
+        .curve-container {
+            border: 1px solid var(--border);
+            background: #fff;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            flex-direction: column;
+        }
+
+        .request-image img {
+            max-width: 90%;
+            max-height: 90%;
+            border: 1px solid #808080;
+        }
+
+        .curve-container img {
+            max-width: 98%;
+            max-height: 85%;
+            object-fit: contain;
+        }
+
+        .metrics-box {
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+        .footer {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid var(--border);
+            padding: 5px;
+            background: #d4d0c8;
+        }
+
+        progress {
+            flex: 1;
+            height: 20px;
+        }
+
+        .quit-btn {
+            width: 100px;
+        }
+
+        label {
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="window-title">
+    <span>MainWindow - MIR Engine</span>
+    <span>X</span>
+</div>
+
+<div class="container-wrapper">
+    <form id="mir-form">
+        <div class="top-row">
+            <fieldset class="request-box">
+                <legend>Request</legend>
+                <input type="file" id="image-input" name="image" style="display:none" accept="image/*">
+                <button type="button" class="load-btn" onclick="document.getElementById('image-input').click()">Load</button>
+            </fieldset>
+
+            <fieldset class="descriptor-box">
+                <legend>Choice of descriptor</legend>
+                <div class="descriptor-grid">
+                    <label><input type="checkbox" name="descriptors" value="bgr"> BGR</label>
+                    <label><input type="checkbox" name="descriptors" value="hsv" checked> HSV</label>
+                    <label><input type="checkbox" name="descriptors" value="hog"> HOG</label>
+
+                    <label><input type="checkbox" name="descriptors" value="sift"> SIFT pooled</label>
+                    <label><input type="checkbox" name="descriptors" value="orb"> ORB pooled</label>
+                    <label><input type="checkbox" name="descriptors" value="moments"> Hu moments</label>
+
+                    <label><input type="checkbox" name="descriptors" value="lbp"> LBP</label>
+                    <label><input type="checkbox" name="descriptors" value="glcm"> GLCM</label>
+                    <label><input type="checkbox" name="descriptors" value="resnet50" checked> ResNet50</label>
+
+                    <label><input type="checkbox" name="descriptors" value="vit_b_16" checked> ViT-B/16</label>
+                </div>
+            </fieldset>
+
+            <fieldset class="search-box">
+                <legend>Search</legend>
+                <div class="search-controls" style="flex-wrap: wrap;">
+                    <div style="width: 100%; display: flex; gap: 10px; margin-bottom: 5px;">
+                        <button type="button" style="flex: 1;" onclick="loadDescriptors()">Load descriptors</button>
+
+                        <label>Distance :</label>
+                        <select name="distance" style="flex: 1;">
+                            <option value="auto" selected>Auto</option>
+                            <option value="euclidean">Euclidean</option>
+                            <option value="cosine">Cosine</option>
+                            <option value="chi_square">Chi-square</option>
+                            <option value="bhattacharyya">Bhattacharyya</option>
+                            <option value="correlation">Correlation</option>
+                            <option value="intersection">Intersection</option>
+                            <option value="brute_force">Brute Force</option>
+                            <option value="flann">FLANN</option>
+                        </select>
+
+                        <label>Top-K :</label>
+                        <select name="top_k" style="flex: 1;">
+                            <option value="20">Top-20</option>
+                            <option value="50" selected>Top-50</option>
+                        </select>
+
+                        <button type="submit" class="search-unimodal-btn">Search (Image)</button>
+                    </div>
+
+                    <div style="width: 100%; display: flex; gap: 10px;">
+                        <input type="text" id="multimodal-query"
+                               placeholder="Type text here to search..."
+                               style="flex: 3; padding: 5px; border: 2px inset #fff;"
+                               onkeydown="if(event.key==='Enter'){ event.preventDefault(); searchMultimodalText(); }">
+
+                        <button type="button" class="search-multimodal-btn"
+                                onclick="searchMultimodalText()" style="flex: 1;">
+                            Multimodal Search (Text)
+                        </button>
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset class="rp_box">
+                <legend>Recall/Precision</legend>
+                <button type="button" style="width:100%" id="compute-rp-btn">Compute R/P Curve</button>
+            </fieldset>
+        </div>
+
+        <div class="main-display">
+            <div class="titles-bar">
+                <div style="width:350px">Request Image</div>
+                <div style="flex:1">Results</div>
+            </div>
+
+            <div class="top-display-area">
+                <div class="display-column request-image">
+                    <img id="preview" src="" alt="Query image">
+                </div>
+
+                <div class="display-column results-grid" id="results">
+                    <!-- Results Grid -->
+                </div>
+            </div>
+
+            <div class="titles-bar">R/P Curve</div>
+
+            <div class="bottom-display-area">
+                <div class="curve-container">
+                    <img id="pr-curve" src="" alt="Click Compute R/P Curve after a search">
+                    <div id="metrics" class="metrics-box"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <label>ProgressBar</label>
+            <progress value="0" max="100" id="progress"></progress>
+            <span id="progress-text">0%</span>
+            <button type="button" class="quit-btn" onclick="window.close()">Quit</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    const form = document.getElementById('mir-form');
+    const imageInput = document.getElementById('image-input');
+    const preview = document.getElementById('preview');
+    const results = document.getElementById('results');
+    const prCurve = document.getElementById('pr-curve');
+    const progress = document.getElementById('progress');
+    const progressText = document.getElementById('progress-text');
+    const metricsBox = document.getElementById('metrics');
+
+    let progressInterval = null;
+    let lastPRData = null;
+    let lastMetrics = null;
+
+    function getSelectedDescriptors() {
+        return Array.from(
+            document.querySelectorAll('input[name="descriptors"]:checked')
+        ).map(cb => cb.value);
+    }
+
+    function startProgress() {
+        progress.value = 0;
+        progressText.innerText = '0%';
+
+        if (progressInterval) clearInterval(progressInterval);
+
+        progressInterval = setInterval(() => {
+            if (progress.value < 90) {
+                progress.value += Math.random() * 5;
+                progressText.innerText = Math.round(progress.value) + '%';
+            }
+        }, 300);
+    }
+
+    function endProgress() {
+        if (progressInterval) clearInterval(progressInterval);
+        progress.value = 100;
+        progressText.innerText = '100%';
+    }
+
+    imageInput.onchange = (e) => {
+        const file = e.target.files[0];
+
+        if (file) {
+            preview.src = URL.createObjectURL(file);
+        }
+    };
+
+    async function loadDescriptors() {
+        const selectedDescs = getSelectedDescriptors();
+
+        if (selectedDescs.length === 0) {
+            alert("Please select at least one descriptor.");
+            return;
+        }
+
+        const formData = new FormData();
+
+        selectedDescs.forEach(desc => {
+            formData.append('descriptors', desc);
+        });
+
+        startProgress();
+
+        try {
+            const response = await fetch('/load_descriptors', {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (data.error) {
+                alert(data.error);
+                endProgress();
+                return;
+            }
+
+            alert("Loaded descriptors: " + data.loaded_descriptors.join(", "));
+            endProgress();
+
+        } catch (err) {
+            alert("Error while loading descriptors.");
+            endProgress();
+        }
+    }
+
+    form.onsubmit = async (e) => {
+        e.preventDefault();
+
+        const query = document.getElementById('multimodal-query').value;
+        const hasFile = imageInput.files.length > 0;
+
+        if (!hasFile && query) {
+            searchMultimodalText();
+            return;
+        }
+
+        if (!hasFile) {
+            alert("Please load a query image.");
+            return;
+        }
+
+        results.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 20px;">Searching...</div>';
+        prCurve.src = "";
+        metricsBox.innerHTML = "";
+        startProgress();
+
+        const formData = new FormData(form);
+
+        formData.delete('descriptors');
+        getSelectedDescriptors().forEach(desc => {
+            formData.append('descriptors', desc);
+        });
+
+        try {
+            const response = await fetch('/search_unimodal', {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+
+            results.innerHTML = '';
+
+            if (data.error) {
+                results.innerHTML = `<div style="grid-column: 1/-1; color: red;">${data.error}</div>`;
+                endProgress();
+                return;
+            }
+
+            data.results.forEach(res => {
+                const div = document.createElement('div');
+                div.className = 'result-item';
+
+                div.innerHTML = `
+                    <img src="${res.path}" title="Score: ${res.score.toFixed(4)}" onclick="window.open(this.src)">
+                    <div>Rank: ${res.rank}</div>
+                    <div>Class: ${res.class}</div>
+                    <div>Score: ${res.score.toFixed(4)}</div>
+                `;
+
+                results.appendChild(div);
+            });
+
+            lastPRData = data.pr_curve;
+            lastMetrics = data.metrics;
+
+            endProgress();
+
+        } catch (err) {
+            results.innerHTML = '<div style="grid-column: 1/-1;">Error searching.</div>';
+            endProgress();
+        }
+    };
+
+    document.getElementById('compute-rp-btn').onclick = () => {
+        if (lastPRData) {
+            prCurve.src = `data:image/png;base64,${lastPRData}`;
+
+            if (lastMetrics) {
+                metricsBox.innerHTML = Object.entries(lastMetrics)
+                    .map(([k, v]) => `<strong>${k}</strong>: ${v}`)
+                    .join(" | ");
+            }
+
+        } else {
+            alert('Please run a search first to generate the R/P curve.');
+        }
+    };
+
+    async function searchMultimodalText() {
+        alert("Multimodal interface is not connected yet. Use the part2 script for now.");
+    }
+</script>
+</body>
+</html>

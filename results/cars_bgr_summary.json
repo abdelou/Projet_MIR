@@ -1,0 +1,18 @@
+{
+  "descriptor": "bgr",
+  "metric": "chi_square",
+  "n_images": 10000,
+  "descriptor_dim": 768,
+  "features_size_mb": 29.296875,
+  "indexing_time_s": 266.22076630592346,
+  "avg_search_time_per_query_s": 0.05498599333222955,
+  "avg_search_time_per_db_image_s": 5.498599333222955e-06,
+  "mean_P@20": 0.13666666666666666,
+  "mean_P@50": 0.116,
+  "mean_P@100": 0.10666666666666667,
+  "mAP@20": 0.04754826604710506,
+  "mAP@50": 0.027851830664970014,
+  "mAP@100": 0.020251995407599047,
+  "mAP_full": 0.10025449160523271,
+  "mean_R_Precision": 0.09903236569903236
+}
