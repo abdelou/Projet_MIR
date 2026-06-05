@@ -1,10 +1,15 @@
+\PassOptionsToPackage{table}{xcolor}
 \documentclass[aspectratio=169]{beamer}
 
 \usetheme{Madrid}
 \usecolortheme{whale}
 
-% Remove navigation symbols
 \setbeamertemplate{navigation symbols}{}
+
+\definecolor{polytechblue}{RGB}{30, 60, 120}
+\setbeamercolor{structure}{fg=polytechblue}
+\setbeamercolor{title}{fg=white, bg=polytechblue}
+\setbeamercolor{block title}{bg=polytechblue, fg=white}
 
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -13,198 +18,96 @@
 \usepackage{booktabs}
 \usepackage{tikz}
 \usepackage{multicol}
+\usepackage{colortbl}
 
 \title{Multimedia Image Retrieval}
 \subtitle{Développement d’un moteur de recherche d’images unimodal et multimodal}
-\author{Julien XU \and Abdelouahad Alla \and Paul TOUSSAINT}
-\institute{University of Mons \\ Faculté Polytechnique \\ Faculté des Sciences}
+\author[Alla, Xu, Toussaint]{Julien XU \and Abdelouahad Alla \and Paul TOUSSAINT}
+\institute[UMONS]{University of Mons \\ Faculté Polytechnique \\ Faculté des Sciences}
 \date{Juin 2026}
 
 \begin{document}
 
-\begin{frame}
+\begin{frame}[plain]
     \titlepage
 \end{frame}
 
-% --- Introduction ---
+\begin{frame}{Sommaire}
+    \tableofcontents
+\end{frame}
+
 \section{Introduction}
 \begin{frame}{Introduction et Objectifs}
+    \begin{block}{Contexte du projet}
+        Système de recherche d'information multimédia (\textit{Information Retrieval}) appliqué à l'automobile.
+    \end{block}
     \begin{itemize}
-        \item \textbf{Contexte} : Projet MIR (Multimedia Information Retrieval).
-        \item \textbf{Objectif Principal} : Concevoir un moteur de recherche performant basé sur le contenu (CBIR).
-        \item \textbf{Deux axes majeurs} :
-        \begin{enumerate}
-            \item \textbf{Recherche Unimodale} : Image-vers-Image sur une base de 10 000 voitures.
-            \item \textbf{Recherche Multimodale} : Texte-vers-Image / Image-vers-Texte avec CLIP sur Flickr8K.
-            \item \textbf{Déploiement} : Mise en ligne sur le Cloud (Render).
-        \end{enumerate}
+        \item Recherche unimodale (Cars) et multimodale (CLIP).
+        \item Déploiement Cloud sur Render.
     \end{itemize}
 \end{frame}
 
-% --- Partie I : Unimodale ---
-\section{Partie I : Recherche Unimodale (CARS)}
-
-\begin{frame}{Partie I : Pipeline et Données}
-    \begin{columns}
+\section{Recherche Unimodale}
+\begin{frame}{Méthodologie et Pipeline}
+    \begin{columns}[T]
         \begin{column}{0.6\textwidth}
             \begin{itemize}
-                \item \textbf{Dataset} : 10 000 images de voitures (10 classes).
-                \item \textbf{Classes cibles} : Kia, Renault, Mercedes, Peugeot, Audi.
-                \item \textbf{Pipeline} :
-                \begin{itemize}
-                    \item \textbf{Off-line} : Extraction et indexation (.npz).
-                    \item \textbf{On-line} : Requête $\rightarrow$ Distance $\rightarrow$ Ranking.
-                \end{itemize}
+                \item \textbf{Dataset} : 10 000 images de voitures.
+                \item \textbf{Indexation} : Extraction de descripteurs visuels.
+                \item \textbf{Moteur} : Calcul de distances et Ranking.
             \end{itemize}
-        </column>
+        \end{column}
         \begin{column}{0.4\textwidth}
-            % Suggéré : Image de l'interface ou quelques exemples de voitures
-            %\includegraphics[width=\textwidth]{figures/cars_examples.png}
-            \centering \textit{[Insérer Fig 2.1 : Interface]}
-        </column>
-    \end{columns}
-\end{frame}
-
-\begin{frame}{Descripteurs et Similarités}
-    \begin{itemize}
-        \item \textbf{Descripteurs Classiques} : 
-        \begin{itemize}
-            \item Couleur : BGR, HSV (Chi-square).
-            \item Texture/Forme : HOG, LBP, SIFT/ORB pooled (Euclidien).
-        \end{itemize}
-        \item \textbf{Descripteurs Profonds} :
-        \begin{itemize}
-            \item \textbf{ResNet50} (CNN) et \textbf{ViT-B/16} (Transformer).
-            \item Distance Cosinus.
-        \end{itemize}
-        \item \textbf{Fusion Tardive} : Normalisation Min-Max et moyenne des distances.
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{Résultats Unimodaux : Analyse Quantitative}
-    \begin{table}[]
-        \centering
-        \resizebox{0.7\textwidth}{!}{
-        \begin{tabular}{@{}lcccc@{}}
-            \toprule
-            \textbf{Descripteur} & \textbf{P@50} & \textbf{mAP@50} & \textbf{mAP@100} & \textbf{R-Prec} \\ \midrule
-            \textbf{ViT-B/16}    & 0.231         & 0.096           & 0.069            & 0.151           \\
-            ResNet50             & 0.172         & 0.070           & 0.054            & 0.128           \\
-            HSV                  & 0.143         & 0.041           & 0.032            & 0.105           \\
-            HOG                  & 0.131         & 0.034           & 0.026            & 0.107           \\ \bottomrule
-        \end{tabular}
-        }
-        \caption{Comparaison globale (Extrait du Tableau 2.6 du rapport)}
-    \end{table}
-    \begin{itemize}
-        \item Supériorité nette des modèles de \textbf{Deep Learning}.
-        \item \textbf{HSV} est le meilleur compromis classique.
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{Résultats Unimodaux : Analyse Qualitative}
-    \begin{columns}
-        \begin{column}{0.5\textwidth}
-            \begin{itemize}
-                \item \textbf{Succès} : Requêtes sur des modèles avec des formes distinctives (ex: Peugeot Rifter).
-                \item \textbf{Échecs/Limites} : "Semantic Gap" - similarité visuelle vs appartenance à la marque.
-            \end{itemize}
-        </column>
-        \begin{column}{0.5\textwidth}
-            \centering \textit{[Insérer Fig 2.2 : Top-20 Rifter]}
-            %\includegraphics[width=0.8\textwidth]{figures/results_rifter.png}
+            \centering \textit{[Insérer Interface Unimodale]}
         \end{column}
     \end{columns}
 \end{frame}
 
-% --- Partie II : Multimodale ---
-\section{Partie II : Moteur de Recherche Multimodal}
-
-\begin{frame}{Partie II : CLIP et Flickr8K}
-    \begin{itemize}
-        \item \textbf{Motivation} : Dépasser la recherche par image pure $\rightarrow$ Requêtes Textuelles.
-        \item \textbf{Dataset} : Flickr8K (8 000 images, 40 000 captions).
-        \item \textbf{Modèle CLIP} :
-        \begin{itemize}
-            \item Espace latent commun (Image \& Texte).
-            \item Projection dans une dimension 512.
-            \item Pas de fine-tuning nécessaire (Zero-shot).
-        \end{itemize}
-    \end{itemize}
+\begin{frame}{Descripteurs Visuels}
+    \begin{exampleblock}{Classiques}
+        Couleur (HSV), Forme (HOG), Texture (LBP), Points (SIFT/ORB).
+    \end{exampleblock}
+    \begin{alertblock}{Deep Learning}
+        ResNet50 (CNN) et ViT-B/16 (Vision Transformer).
+    \end{alertblock}
 \end{frame}
 
-\begin{frame}{Architecture Multimodale}
-    \centering
-    \begin{tikzpicture}[node distance=2cm, auto]
-        \node (input) [draw, fill=blue!10] {Requête (Texte/Image)};
-        \node (enc) [draw, right of=input, xshift=2cm, fill=green!10] {Encodeur CLIP};
-        \node (faiss) [draw, right of=enc, xshift=2cm, fill=red!10] {Index FAISS};
-        \node (results) [draw, below of=faiss, fill=yellow!10] {Top-$k$ Résultats};
-        
-        \draw[->] (input) -- (enc);
-        \draw[->] (enc) -- (faiss);
-        \draw[->] (faiss) -- (results);
-    \end{tikzpicture}
-    \vspace{0.5cm}
-    \begin{itemize}
-        \item Utilisation de \textbf{FAISS} pour une recherche de similarité ultra-rapide.
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{Résultats CLIP : Performance Globale}
+\begin{frame}{Résultats de l'évaluation}
     \begin{table}[]
         \centering
-        \begin{tabular}{@{}lcc@{}}
+        \resizebox{0.8\textwidth}{!}{
+        \begin{tabular}{lcccc}
             \toprule
-            \textbf{Tâche} & \textbf{mAP} & \textbf{Recall@10} \\ \midrule
-            \textbf{Texte $\rightarrow$ Image} & 0.4969         & 0.660             \\
-            Image $\rightarrow$ Texte & 0.2979         & 0.533             \\ \bottomrule
+            \textbf{Descripteur} & \textbf{P@50} & \textbf{mAP@50} & \textbf{R-Prec} \\ \midrule
+            \rowcolor{blue!15} ViT-B/16 & \textbf{0.231} & \textbf{0.096} & \textbf{0.151} \\
+            ResNet50 & 0.172 & 0.070 & 0.128 \\
+            HSV & 0.143 & 0.041 & 0.105 \\
+            \bottomrule
         \end{tabular}
-        \caption{Résumé des performances (Tableau 3.5)}
+        }
     \end{table}
-    \begin{itemize}
-        \item Excellente capture de la sémantique pour les descriptions naturelles.
-        \item Image-to-Text plus difficile (1 choix parmi 40 000).
-    \end{itemize}
+    \centering Les modèles \textbf{Transformers} offrent les meilleures performances.
 \end{frame}
 
-% --- Partie III : Cloud ---
-\section{Partie III : Hébergement Cloud}
-
-\begin{frame}{Déploiement sur Render}
+\section{Recherche Multimodale}
+\begin{frame}{Le Modèle CLIP Vision et Langage}
     \begin{itemize}
-        \item \textbf{Technologies} : Docker, Flask, Render.
-        \item \textbf{Architecture} :
-        \begin{itemize}
-            \item Serveur léger (app\_cloud.py).
-            \item Indexation locale transmise au Cloud.
-        \end{itemize}
-        \item \textbf{Contraintes Majeures} :
-        \begin{itemize}
-            \item Mémoire limitée (512 Mo RAM).
-            \item \textbf{Solution} : Optimisation des modèles (CLIP allégé) et pré-chargement des embeddings.
-        \end{itemize}
+        \item \textbf{Principe} : Espace latent commun pour le texte et l'image.
+        \item \textbf{Tâches} : Text-to-Image et Image-to-Text.
+        \item \textbf{Performance} : mAP de \textbf{0.4969} en mode Zero-shot.
     \end{itemize}
+    \centering \textit{[Insérer Courbe P-R CLIP]}
 \end{frame}
 
-% --- Conclusion ---
-\section{Conclusion}
-\begin{frame}{Conclusion}
-    \begin{itemize}
-        \item \textbf{Bilan} : 
-        \begin{itemize}
-            \item Succès du CBIR sur les voitures via Deep Learning.
-            \item Puissance des modèles fondationnels (CLIP) pour le multimodal.
-        \end{itemize}
-        \item \textbf{Perspectives} :
-        \begin{itemize}
-            \item Fine-tuning sur des datasets spécialisés.
-            \item Optimisation de la fusion (pondération apprise).
-            \item Déploiement sur des instances Cloud plus puissantes.
-        \end{itemize}
-    \end{itemize}
-    \vfill
-    \centering \textbf{Merci pour votre attention !}
+\section{Cloud et Conclusion}
+\begin{frame}{Déploiement et Conclusion}
+    \begin{block}{Hébergement Cloud}
+        Déploiement sur \textbf{Render} (Docker/Flask) avec optimisation RAM (512 Mo).
+    \end{block}
+    \begin{block}{Conclusion}
+        Le Deep Learning et les modèles fondationnels (CLIP) améliorent drastiquement le CBIR par rapport aux méthodes classiques.
+    \end{block}
+    \centering \vfill \textbf{Merci pour votre attention !}
 \end{frame}
 
 \end{document}
