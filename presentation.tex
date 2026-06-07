@@ -81,9 +81,9 @@
                 \end{itemize}
             \end{itemize}
         \end{column}
-        \begin{column}{0.4\textwidth}
+        \begin{column}{0.5\textwidth}
             \centering
-            \includegraphics[width=0.8\textwidth]{figures/interface_unimodale.png}\\
+            \includegraphics[width=0.8\textwidth]{figures/interface_part1.png}\\
             \tiny Interface Flask (Fig 2.1)
         \end{column}
     \end{columns}
@@ -107,18 +107,19 @@
     \begin{table}[]
         \centering
         \resizebox{0.8\textwidth}{!}{
-        \begin{tabular}{lcccc}
+        \begin{tabular}{lccccc}
             \toprule
-            \textbf{Descripteur} & \textbf{P@50} & \textbf{mAP@50} & \textbf{R-Prec} & \textbf{vs HSV}\\ \midrule
-            \rowcolor{blue!15} \textbf{ViT-B/16} & \textbf{0.231} & \textbf{0.096} & \textbf{0.151} & \textbf{+134\%} \\
-            ResNet50 & 0.172 & 0.070 & 0.128 & +70\% \\
-            HSV (Baseline) & 0.143 & 0.041 & 0.105 & - \\
+            \textbf{Descripteur} & \textbf{P@50} & \textbf{mAP@50} & \textbf{mAP@100} & \textbf{R-Prec} & \textbf{vs HSV} \\ \midrule
+            \rowcolor{blue!15} \textbf{ViT-B/16} & \textbf{0.231} & \textbf{0.096} & \textbf{0.069} & \textbf{0.151} & \textbf{+134\%} \\
+            ResNet50 & 0.172 & 0.070 & 0.054 & 0.128 & +70\% \\
+            HSV (Baseline) & 0.143 & 0.041 & 0.032 & 0.105 & - \\
+            BGR & 0.116 & 0.028 & 0.020 & 0.099 & - \\
             \bottomrule
         \end{tabular}
         }
     \end{table}
     \begin{block}{Impact du Deep Learning}
-        Le passage aux Transformers multiplie par \textbf{plus de 2} la précision moyenne par rapport aux méthodes classiques couleur.
+        Le passage aux Transformers multiplie par \textbf{plus de 2} la précision moyenne par rapport aux méthodes classiques.
     \end{block}
 \end{frame}
 
@@ -139,21 +140,21 @@
     \end{table}
     \begin{itemize}
         \item \textbf{ViT} : Meilleur équilibre entre taille de vecteur et précision.
-        \item \textbf{HOG} : Très lent à la recherche commerciale à cause de sa dimension.
+        \item \textbf{HOG} : Très lent à la recherche à cause de sa dimension élevée.
         \item \textbf{HSV} : Idéal pour une indexation ultra-légère.
     \end{itemize}
 \end{frame}
-
+    
 \begin{frame}{Analyse Qualitative : Cas de succès et limites}
     \begin{columns}[T]
         \begin{column}{0.5\textwidth}
             \centering
-            \includegraphics[width=0.9\textwidth]{figures/resultats_unimodal_succes.png}\\
+            \includegraphics[width=0.9\textwidth]{figures/r11_resnet50_top20.png}\\
             \tiny Succès : Peugeot Rifter (Fig 2.2)
         \end{column}
         \begin{column}{0.5\textwidth}
             \centering
-            \includegraphics[width=0.9\textwidth]{figures/resultats_unimodal_echec.png}\\
+            \includegraphics[width=0.9\textwidth]{figures/r10_failure_top50.png}\\
             \tiny Limites : Peugeot 508 (Fig 2.5)
         \end{column}
     \end{columns}
@@ -181,12 +182,12 @@
     \begin{columns}
         \begin{column}{0.5\textwidth}
             \centering
-            \includegraphics[width=0.9\textwidth]{figures/courbe_text_to_image.png}\\
+            \includegraphics[width=0.9\textwidth]{figures/Courbe1.png}\\
             \tiny P-R Text-to-Image (Fig 3.2)
         \end{column}
         \begin{column}{0.5\textwidth}
             \centering
-            \includegraphics[width=0.9\textwidth]{figures/courbe_image_to_text.png}\\
+            \includegraphics[width=0.9\textwidth]{figures/courbe2.png}\\
             \tiny P-R Image-to-Text (Fig 3.3)
         \end{column}
     \end{columns}
