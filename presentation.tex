@@ -167,32 +167,78 @@
 % --- Section 3: Multimodale ---
 \section{Recherche Multimodale (CLIP)}
 
-\begin{frame}{Modèle CLIP et Dataset Flickr8K}
-    \begin{itemize}
-        \item \textbf{Dataset} : 8 000 images quotidiennes, 40 000 captions (5/image).
-        \item \textbf{Modèle} : \textbf{CLIP ViT-B/32} (Contrastive Language-Image Pretraining).
-        \item \textbf{Architecture} : Espace latent commun Image/Texte de dimension 512.
-    \end{itemize}
-    \begin{block}{Recherche ultra-rapide via FAISS}
-        Indexation des 40 000 captions dans un index \textbf{IndexFlatIP} pour un temps de réponse instantané.
-    \end{block}
+\begin{frame}{Dataset Flickr8K et Architecture CLIP}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            \begin{itemize}
+                \item \textbf{Dataset} : 8 091 images variées.
+                \item \textbf{Annotation} : 40 455 captions (5 par image).
+                \item \textbf{Pipeline Technique} :
+                \begin{itemize}
+                    \item \textbf{Image Encoder} : ViT-B/32 (dim 512).
+                    \item \textbf{Text Encoder} : Transformer (dim 512).
+                    \item \textbf{Indexation} : FAISS (IndexFlatIP).
+                \end{itemize}
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \centering
+            \begin{tikzpicture}[scale=0.7]
+                \draw[thick, fill=green!5] (0,2) rectangle (2,3) node[midway] {\tiny Image};
+                \draw[thick, fill=blue!5] (0,0) rectangle (2,1) node[midway] {\tiny Texte};
+                \draw[->, thick] (2,2.5) -- (3,1.5);
+                \draw[->, thick] (2,0.5) -- (3,1.5);
+                \draw[thick, fill=polytechblue!20] (3,1) rectangle (5,2) node[midway] {\tiny Espace CLIP};
+            \end{tikzpicture}
+            \vspace{0.3cm}
+            \tiny Espace latent commun (512-dim)
+        \end{column}
+    \end{columns}
 \end{frame}
 
 \begin{frame}{Évaluation Multimodale : Résultats CLIP}
     \begin{columns}
         \begin{column}{0.5\textwidth}
             \centering
-            \includegraphics[width=0.9\textwidth]{figures/Courbe1.png}\\
+            \includegraphics[width=0.85\textwidth]{figures/Courbe1.png}\\
             \tiny P-R Text-to-Image (Fig 3.2)
         \end{column}
         \begin{column}{0.5\textwidth}
             \centering
-            \includegraphics[width=0.9\textwidth]{figures/courbe2.png}\\
+            \includegraphics[width=0.85\textwidth]{figures/courbe2.png}\\
             \tiny P-R Image-to-Text (Fig 3.3)
         \end{column}
     \end{columns}
-    \begin{block}{Performance}
-        mAP Text-to-Image de \textbf{0.4969}. Le modèle capture extrêmement bien les descriptions en langage naturel (\textit{Zero-shot}).
+    \begin{table}[]
+        \centering
+        \resizebox{0.7\textwidth}{!}{
+        \begin{tabular}{lcc}
+            \toprule
+            \textbf{Tâche} & \textbf{mAP} & \textbf{R@10} \\ \midrule
+            \rowcolor{green!10} Texte $\rightarrow$ Image (Recherche) & \textbf{0.4969} & \textbf{0.660} \\
+            Image $\rightarrow$ Texte (Légendage) & 0.2979 & 0.533 \\ \bottomrule
+        \end{tabular}
+        }
+    \end{table}
+\end{frame}
+
+\begin{frame}{Comparaison : Approche Unimodale vs Multimodale}
+    \begin{table}[]
+        \centering
+        \resizebox{0.9\textwidth}{!}{
+        \begin{tabular}{llcl}
+            \toprule
+            \textbf{Partie} & \textbf{Approche / Modèle} & \textbf{mAP} & \textbf{Dataset} \\ \midrule
+            Partie I & \textbf{ViT-B/16 (Image-Image)} & 0.231 & Cars (Spécialisé) \\
+            Partie I & HSV (Baseline Couleur) & 0.041 & Cars (Spécialisé) \\ \midrule
+            \rowcolor{blue!5} Partie II & \textbf{CLIP (Texte-Image)} & \textbf{0.497} & Flickr8K (Générique) \\
+            Partie II & CLIP (Image-Texte) & 0.298 & Flickr8K (Générique) \\
+            \bottomrule
+        \end{tabular}
+        }
+    \end{table}
+    \begin{block}{Conclusion de l'analyse}
+        Le moteur \textbf{multimodal} offre une plus grande flexibilité (langage naturel) mais reste moins spécifique au domaine automobile que l'approche \textbf{unimodale} optimisée.
     \end{block}
 \end{frame}
 
